@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT Help Desk Ticketing System</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="top-bar">
+    <h1>Campus IT Help Desk</h1>
+    <div class="subtitle">Ticketing & Dispatch Platform</div>
+  </header>
+
+  <main class="container">
+    <!-- Dashboard Section -->
+    <section class="dashboard">
+      <div class="stat-card">
+        <h3>Open</h3>
+        <span id="stat-open">0</span>
+      </div>
+      <div class="stat-card">
+        <h3>In Progress</h3>
+        <span id="stat-progress">0</span>
+      </div>
+      <div class="stat-card">
+        <h3>Resolved</h3>
+        <span id="stat-resolved">0</span>
+      </div>
+      <div class="stat-card">
+        <h3>Closed</h3>
+        <span id="stat-closed">0</span>
+      </div>
+      <div class="stat-card alert-card">
+        <h3>Unassigned (Open)</h3>
+        <span id="stat-unassigned">0</span>
+      </div>
+    </section>
+
+    <!-- Controls & Create Form -->
+    <div class="grid-2col">
+      <!-- Create Ticket Form -->
+      <section class="card">
+        <h2>Submit New Ticket</h2>
+        <form id="ticket-form">
+          <div class="form-group">
+            <label>Requester Name *</label>
+            <input type="text" id="req-name" required placeholder="e.g. Maria Santos">
+          </div>
+          <div class="form-group">
+            <label>Category *</label>
+            <select id="category" required>
+              <option value="Hardware">Hardware</option>
+              <option value="Network">Network</option>
+              <option value="Software">Software</option>
+              <option value="Account">Account</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Priority *</label>
+            <select id="priority" required>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+              <option value="Critical">Critical</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Description *</label>
+            <textarea id="description" rows="3" required placeholder="Describe the issue..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit Ticket</button>
+        </form>
+      </section>
+
+      <!-- Filter & Search Controls -->
+      <section class="card">
+        <h2>Search & Filter Tickets</h2>
+        <div class="filter-grid">
+          <input type="text" id="search-input" placeholder="Search description...">
+          <select id="filter-status">
+            <option value="All">All Statuses</option>
+            <option value="Open">Open</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+            <option value="Closed">Closed</option>
+          </select>
+          <select id="filter-category">
+            <option value="All">All Categories</option>
+            <option value="Hardware">Hardware</option>
+            <option value="Network">Network</option>
+            <option value="Software">Software</option>
+            <option value="Account">Account</option>
+          </select>
+          <select id="filter-priority">
+            <option value="All">All Priorities</option>
+            <option value="Critical">Critical</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+          <select id="filter-technician">
+            <option value="All">All Technicians</option>
+            <option value="Unassigned">Unassigned</option>
+            <option value="Tech Alex">Tech Alex</option>
+            <option value="Tech Jordan">Tech Jordan</option>
+            <option value="Tech Taylor">Tech Taylor</option>
+          </select>
+          <select id="sort-by">
+            <option value="date-desc">Newest First</option>
+            <option value="date-asc">Oldest First</option>
+            <option value="priority">Priority (Critical First)</option>
+          </select>
+        </div>
+      </section>
+    </div>
+
+    <!-- Ticket List Table -->
+    <section class="card">
+      <h2>Ticket Queue</h2>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Requester</th>
+              <th>Category</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Technician</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="ticket-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal View/Edit Details -->
+  <div id="modal-backdrop" class="modal-backdrop hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modal-ticket-id">Ticket Details</h2>
+        <button id="modal-close" class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Requester:</strong> <span id="m-requester"></span></p>
+        <p><strong>Category:</strong> <span id="m-category"></span></p>
+        <p><strong>Priority:</strong> <span id="m-priority"></span></p>
+        <p><strong>Description:</strong> <span id="m-description"></span></p>
+        <p><strong>Date Created:</strong> <span id="m-created"></span></p>
+        <p><strong>Resolution Time:</strong> <span id="m-resolution-time">N/A</span></p>
+        
+        <hr>
+        <div class="form-group">
+          <label><strong>Assign Technician:</strong></label>
+          <select id="m-tech-select">
+            <option value="Unassigned">Unassigned</option>
+            <option value="Tech Alex">Tech Alex</option>
+            <option value="Tech Jordan">Tech Jordan</option>
+            <option value="Tech Taylor">Tech Taylor</option>
+          </select>
+          <button id="btn-save-tech" class="btn btn-sm">Save Assignment</button>
+        </div>
+
+        <div class="form-group">
+          <label><strong>Change Status:</strong></label>
+          <select id="m-status-select">
+            <option value="Open">Open</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+            <option value="Closed">Closed</option>
+          </select>
+          <button id="btn-save-status" class="btn btn-sm btn-primary">Update Status</button>
+        </div>
+
+        <hr>
+        <h3>Ticket Notes</h3>
+        <div class="add-note-box">
+          <input type="text" id="note-author" placeholder="Your Name">
+          <textarea id="note-text" placeholder="Add a comment/update..."></textarea>
+          <button id="btn-add-note" class="btn btn-sm">Post Note</button>
+        </div>
+        <div id="notes-list" class="notes-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
