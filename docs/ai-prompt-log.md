@@ -132,3 +132,25 @@ The resolution calculation now accurately reports "Not resolved yet" when ticket
 
 #### 4. What I changed:
 Ensured the modal UI immediately reflects the reset status and hides stale resolution day calculations.
+
+---
+
+### Prompt #7
+**Tool:** ChatGPT / Claude Code / Codex  
+**Purpose:** Final Documentation Cleanup & Code Polish  
+
+#### 1. Prompt I used:
+> **Context:** Finalizing the IT415 Midterm Project repository.  
+> **Objective:** Polish documentation files, summarize system functionality, update user instructions, and record final prompt entries.  
+> **Requirements:** Ensure complete compliance with the 7 mandatory Git stages, update \README.md\, and verify all markdown documents are complete.  
+> **Constraints:** Clean up project tree without extra build artifacts.  
+> **Expected Output:** Comprehensive \README.md\ documentation and updated \i-prompt-log.md\.
+
+#### 2. AI's answer:
+Provided structured README markdown containing feature summaries, project layout trees, and execution guides alongside the final prompt log entry.
+
+#### 3. My evaluation:
+The project documentation is comprehensive, organized, and fulfills all midterm rubric submission requirements.
+
+#### 4. What I changed:
+Verified pathing references for screenshots and updated system instructions for running without server build setups.
