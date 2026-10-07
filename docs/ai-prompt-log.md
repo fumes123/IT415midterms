@@ -109,3 +109,26 @@ Successfully prevents blank and trivial single-letter ticket submissions or empt
 
 #### 4. What I changed:
 Customized error messages to clearly instruct users on required minimum character lengths[cite: 2, 3].
+
+---
+
+### Prompt #6
+**Tool:** ChatGPT / Claude Code / Codex  
+**Purpose:** Bug Fixing — Resolution Time Reset on Reopened Tickets  
+
+#### 1. Prompt I used:
+> **Context:** Resolving a logic bug in \js/app.js\ regarding ticket resolution metrics.  
+> **Objective:** Fix issue where tickets moved back from 'Resolved' to 'In Progress' retained their old \dateResolved\ timestamp.  
+> **Requirements:** Reset \dateResolved\ to \
+ull\ when transitioning back to 'In Progress', recalculating resolution time dynamically when re-resolved.  
+> **Constraints:** Do not lose historical note context or technician assignment details.  
+> **Expected Output:** Updated \updateTicketStatus\ function explicitly handling reset of \dateResolved\.
+
+#### 2. AI's answer:
+Updated updateTicketStatus to reset 	.dateResolved = null whenever a ticket returns to In Progress status.
+
+#### 3. My evaluation:
+The resolution calculation now accurately reports "Not resolved yet" when tickets are reopened for further work.
+
+#### 4. What I changed:
+Ensured the modal UI immediately reflects the reset status and hides stale resolution day calculations.

@@ -53,7 +53,6 @@ ticketForm.addEventListener("submit", (e) => {
   const priority = document.getElementById("priority").value;
   const description = document.getElementById("description").value.trim();
 
-  // Run Stage 5 validation
   if (!validateTicketInput(requesterName, description)) {
     return;
   }
@@ -99,15 +98,21 @@ function isValidStatusTransition(current, next, technician) {
   return false;
 }
 
+// Stage 6 Bug Fix: Clear dateResolved when moving back from Resolved to In Progress
 function updateTicketStatus(id, newStatus) {
   const t = tickets.find(x => x.id === id);
   if (!t) return;
 
   if (isValidStatusTransition(t.status, newStatus, t.assignedTechnician)) {
     t.status = newStatus;
-    if (newStatus === "Resolved" && !t.dateResolved) {
+    
+    if (newStatus === "Resolved") {
       t.dateResolved = new Date().toISOString();
+    } else if (newStatus === "In Progress") {
+      // Clear resolution date if reopened for further work
+      t.dateResolved = null;
     }
+
     saveState();
     openModal(id);
   }

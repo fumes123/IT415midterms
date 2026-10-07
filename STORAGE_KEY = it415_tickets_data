@@ -1,0 +1,6 @@
+[33m42b7e4e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m Add input validation: restrict empty submissions and bad status jumps
+[33me612d4f[m Merge pull request #1 from fumes123/feature/status-rules
+[33maa10c68[m[33m ([m[1;31morigin/feature/status-rules[m[33m, [m[1;32mfeature/status-rules[m[33m)[m Add status rules: state transitions and technician checks
+[33m8447104[m Implement core functionality: ticket submission and localStorage support
+[33m7cc29f3[m Create application interface: form, filters, and dashboard layout
+[33m5c4b526[m Initial project setup: folders and README
