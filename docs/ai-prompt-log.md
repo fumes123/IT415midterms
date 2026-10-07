@@ -87,3 +87,25 @@ Validation works correctly. Prevents direct jumps like Open -> Closed and alerts
 
 #### 4. What I changed:
 Refactored transition dictionary to explicitly allow Resolved tickets to transition back to In Progress for unresolved issues[cite: 3].
+
+---
+
+### Prompt #5
+**Tool:** ChatGPT / Claude Code / Codex  
+**Purpose:** Form Input & Submission Validation  
+
+#### 1. Prompt I used:
+> **Context:** Improving application resilience in \js/app.js\[cite: 2, 3].  
+> **Objective:** Add input validation guards for ticket submission and note additions[cite: 2, 3].  
+> **Requirements:** Reject white-space-only fields, enforce minimum character length (2 chars for names, 10 chars for ticket descriptions), and show error popups when validation fails[cite: 2, 3].  
+> **Constraints:** Prevent form submission when invalid; display clear feedback alerts[cite: 2, 3].  
+> **Expected Output:** \alidateTicketInput\ guard logic integrated into the submit event listener[cite: 2, 3].
+
+#### 2. AI's answer:
+Provided validation helper functions and integrated string trimming and length checks into submit actions[cite: 2, 3].
+
+#### 3. My evaluation:
+Successfully prevents blank and trivial single-letter ticket submissions or empty notes[cite: 2, 3].
+
+#### 4. What I changed:
+Customized error messages to clearly instruct users on required minimum character lengths[cite: 2, 3].

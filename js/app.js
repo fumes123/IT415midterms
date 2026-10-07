@@ -32,15 +32,38 @@ function generateTicketId() {
   return \TKT-\\;
 }
 
+// Stage 5 Validation Guard for Ticket Submission
+function validateTicketInput(requesterName, description) {
+  if (!requesterName || requesterName.trim().length < 2) {
+    alert("Validation Error: Requester name must be at least 2 characters long.");
+    return false;
+  }
+  if (!description || description.trim().length < 10) {
+    alert("Validation Error: Description must be at least 10 characters long to explain the issue.");
+    return false;
+  }
+  return true;
+}
+
 // Create Ticket
 ticketForm.addEventListener("submit", (e) => {
   e.preventDefault();
+  const requesterName = document.getElementById("req-name").value.trim();
+  const category = document.getElementById("category").value;
+  const priority = document.getElementById("priority").value;
+  const description = document.getElementById("description").value.trim();
+
+  // Run Stage 5 validation
+  if (!validateTicketInput(requesterName, description)) {
+    return;
+  }
+
   const newTicket = {
     id: generateTicketId(),
-    requesterName: document.getElementById("req-name").value.trim(),
-    category: document.getElementById("category").value,
-    priority: document.getElementById("priority").value,
-    description: document.getElementById("description").value.trim(),
+    requesterName: requesterName,
+    category: category,
+    priority: priority,
+    description: description,
     status: "Open",
     assignedTechnician: "Unassigned",
     dateCreated: new Date().toISOString(),
@@ -51,18 +74,16 @@ ticketForm.addEventListener("submit", (e) => {
   tickets.push(newTicket);
   saveState();
   ticketForm.reset();
+  alert(\Success: Ticket \ created successfully!\);
 });
 
 // Enforce State Machine & Status Rules
 function isValidStatusTransition(current, next, technician) {
-  // Rule 5: A ticket can become In Progress ONLY if it has an assigned technician
   if (next === "In Progress" && (technician === "Unassigned" || !technician)) {
     alert("Rule Violation: A ticket can become 'In Progress' ONLY if it has an assigned technician.");
     return false;
   }
 
-  // Rule 4: Status order Open -> In Progress -> Resolved -> Closed
-  // A Resolved ticket can go back to In Progress if the fix did not work. No other jumps allowed.
   const allowed = {
     "Open": ["In Progress"],
     "In Progress": ["Resolved"],
@@ -102,15 +123,23 @@ function assignTechnician(id, tech) {
 }
 
 function addNote(id, author, text) {
-  if (!author || !text) {
-    alert("Please provide both name and note text.");
+  const cleanAuthor = author ? author.trim() : "";
+  const cleanText = text ? text.trim() : "";
+
+  if (!cleanAuthor || cleanAuthor.length < 2) {
+    alert("Validation Error: Note author name must be at least 2 characters.");
     return;
   }
+  if (!cleanText || cleanText.length < 3) {
+    alert("Validation Error: Note text cannot be empty or too short.");
+    return;
+  }
+
   const t = tickets.find(x => x.id === id);
   if (t) {
     t.notes.unshift({
-      author,
-      text,
+      author: cleanAuthor,
+      text: cleanText,
       date: new Date().toISOString()
     });
     saveState();
@@ -135,7 +164,6 @@ function renderDashboard() {
 function renderTable() {
   let list = [...tickets];
 
-  // Filters
   const q = searchInput.value.toLowerCase();
   if (q) list = list.filter(t => t.description.toLowerCase().includes(q));
   if (filterStatus.value !== "All") list = list.filter(t => t.status === filterStatus.value);
@@ -143,7 +171,6 @@ function renderTable() {
   if (filterPriority.value !== "All") list = list.filter(t => t.priority === filterPriority.value);
   if (filterTechnician.value !== "All") list = list.filter(t => t.assignedTechnician === filterTechnician.value);
 
-  // Sorting
   const pRank = { Critical: 4, High: 3, Medium: 2, Low: 1 };
   if (sortBy.value === "priority") {
     list.sort((a, b) => pRank[b.priority] - pRank[a.priority]);
@@ -191,7 +218,6 @@ function openModal(id) {
   document.getElementById("m-tech-select").value = t.assignedTechnician;
   document.getElementById("m-status-select").value = t.status;
 
-  // Notes Render (Newest First)
   const notesContainer = document.getElementById("notes-list");
   notesContainer.innerHTML = t.notes.map(n => \
     <div class="note-item">
@@ -217,8 +243,8 @@ function setupEventListeners() {
   };
 
   document.getElementById("btn-add-note").onclick = () => {
-    const author = document.getElementById("note-author").value.trim();
-    const text = document.getElementById("note-text").value.trim();
+    const author = document.getElementById("note-author").value;
+    const text = document.getElementById("note-text").value;
     addNote(selectedTicketId, author, text);
     document.getElementById("note-text").value = "";
   };
