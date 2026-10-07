@@ -53,16 +53,43 @@ ticketForm.addEventListener("submit", (e) => {
   ticketForm.reset();
 });
 
-// Basic Status & Tech Assignment Updates
+// Enforce State Machine & Status Rules
+function isValidStatusTransition(current, next, technician) {
+  // Rule 5: A ticket can become In Progress ONLY if it has an assigned technician
+  if (next === "In Progress" && (technician === "Unassigned" || !technician)) {
+    alert("Rule Violation: A ticket can become 'In Progress' ONLY if it has an assigned technician.");
+    return false;
+  }
+
+  // Rule 4: Status order Open -> In Progress -> Resolved -> Closed
+  // A Resolved ticket can go back to In Progress if the fix did not work. No other jumps allowed.
+  const allowed = {
+    "Open": ["In Progress"],
+    "In Progress": ["Resolved"],
+    "Resolved": ["In Progress", "Closed"],
+    "Closed": []
+  };
+
+  if (allowed[current] && allowed[current].includes(next)) {
+    return true;
+  }
+
+  alert(\Invalid Transition: Jump from '\' to '\' is strictly not allowed.\);
+  return false;
+}
+
 function updateTicketStatus(id, newStatus) {
   const t = tickets.find(x => x.id === id);
   if (!t) return;
-  t.status = newStatus;
-  if (newStatus === "Resolved" && !t.dateResolved) {
-    t.dateResolved = new Date().toISOString();
+
+  if (isValidStatusTransition(t.status, newStatus, t.assignedTechnician)) {
+    t.status = newStatus;
+    if (newStatus === "Resolved" && !t.dateResolved) {
+      t.dateResolved = new Date().toISOString();
+    }
+    saveState();
+    openModal(id);
   }
-  saveState();
-  openModal(id);
 }
 
 function assignTechnician(id, tech) {

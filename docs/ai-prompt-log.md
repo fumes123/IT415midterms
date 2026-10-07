@@ -65,3 +65,25 @@ The script cleanly handles ticket submission, updates counts on the dashboard, a
 
 #### 4. What I changed:
 Added string escaping utility escapeHtml to prevent XSS vulnerability when displaying user-submitted requester names and notes.
+
+---
+
+### Prompt #4
+**Tool:** ChatGPT / Claude Code / Codex  
+**Purpose:** Feature Implementation — Status Transition State Machine Rules  
+
+#### 1. Prompt I used:
+> **Context:** Working on feature branch \eature/status-rules\ for IT Help Desk Ticketing System[cite: 2, 3].  
+> **Objective:** Enforce status sequence rules (Open -> In Progress -> Resolved -> Closed, with Resolved -> In Progress allowed) and technician requirements[cite: 3].  
+> **Requirements:** Prevent invalid jumps (e.g. Open to Closed), show alert dialogs on illegal moves, and block transition to 'In Progress' if technician is 'Unassigned'[cite: 3].  
+> **Constraints:** Must evaluate current state dynamically before allowing state change[cite: 3].  
+> **Expected Output:** \isValidStatusTransition\ validation guard function implemented in \js/app.js\[cite: 3].
+
+#### 2. AI's answer:
+Provided the guard function logic checking allowed state transitions and technician assignments with user feedback alerts[cite: 3].
+
+#### 3. My evaluation:
+Validation works correctly. Prevents direct jumps like Open -> Closed and alerts when attempting to move an unassigned ticket to In Progress[cite: 3].
+
+#### 4. What I changed:
+Refactored transition dictionary to explicitly allow Resolved tickets to transition back to In Progress for unresolved issues[cite: 3].
