@@ -43,3 +43,25 @@ The markup covers all requirements from Scenario 2, including modal overlays for
 
 #### 4. What I changed:
 Adjusted grid layouts to accommodate mobile viewport scaling and added color-coded status/priority CSS badge utilities.
+
+---
+
+### Prompt #3
+**Tool:** ChatGPT / Claude Code / Codex  
+**Purpose:** Core Application Functionality & LocalStorage  
+
+#### 1. Prompt I used:
+> **Context:** Developing js/app.js for the IT Help Desk Ticketing System.  
+> **Objective:** Implement auto-increment ticket IDs (TKT-0001), ticket creation, notes system (newest first), search/filtering/sorting engine, and stats dashboard metrics[cite: 3].  
+> **Requirements:** Data must persist across browser reloads using localStorage. Generate IDs dynamically and render statistics dynamically[cite: 3].  
+> **Constraints:** Plain ES6 JavaScript, no external state libraries[cite: 2].  
+> **Expected Output:** Working JavaScript code managing CRUD operations and dynamic DOM table rendering[cite: 2, 3].
+
+#### 2. AI's answer:
+Provided js/app.js logic with state persistence helpers (saveState), ticket ID generator, array filtering, and DOM event handlers[cite: 2, 3].
+
+#### 3. My evaluation:
+The script cleanly handles ticket submission, updates counts on the dashboard, and remembers entries using browser storage[cite: 2, 3].
+
+#### 4. What I changed:
+Added string escaping utility escapeHtml to prevent XSS vulnerability when displaying user-submitted requester names and notes.
